@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Lead {
+  id              String         @id @default(cuid())
+  name            String
+  phone           String?
+  email           String?
+  location        String
+  serviceType     String
+  rawInput        String
+  urgency         String
+  preferredSchedule String?
+  status          String         @default("new")
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  triageResult    TriageResult?
+  followUpDrafts  FollowUpDraft[]
+  actionLogs      ActionLog[]
+}
+
+model TriageResult {
+  id              String   @id @default(cuid())
+  leadId          String   @unique
+  lead            Lead     @relation(fields: [leadId], references: [id])
+  classification  String
+  isEmergency     Boolean  @default(false)
+  emergencyOverride Boolean?
+  slaHint         String
+  serviceNotes    String
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+}
+
+model FollowUpDraft {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id])
+  type      String
+  variant   String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model ActionLog {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id])
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+}
