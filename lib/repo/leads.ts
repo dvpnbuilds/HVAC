@@ -18,3 +18,14 @@ export function createLead(input: CreateLeadInput) {
 export function getLeadById(id: string) {
   return prisma.lead.findUnique({ where: { id } });
 }
+
+export function getAllLeads() {
+  return prisma.lead.findMany({
+    include: { triageResult: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export function updateLeadStatus(id: string, status: string) {
+  return prisma.lead.update({ where: { id }, data: { status } });
+}

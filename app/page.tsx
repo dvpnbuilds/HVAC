@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { clientConfig } from "@/client.config";
 import { LeadIntakeForm } from "@/app/components/LeadIntakeForm";
 
@@ -10,6 +11,9 @@ export default function Home() {
       <p className="-mt-4 text-zinc-600">{clientConfig.tagline}</p>
       <p className="text-sm text-zinc-500">{clientConfig.phone}</p>
       <LeadIntakeForm />
+      <Link href="/faq" className="text-sm underline">
+        Frequently asked questions
+      </Link>
     </div>
   );
 }
