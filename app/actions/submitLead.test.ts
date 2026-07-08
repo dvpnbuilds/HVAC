@@ -29,7 +29,7 @@ describe("submitLead action", () => {
     const uniqueName = `Alice Chen ${Date.now()}`;
 
     const result = await submitLead(
-      { errors: {}, success: false },
+      { errors: {}, success: false, values: validFields },
       formDataFrom({ ...validFields, name: uniqueName })
     );
 
@@ -51,7 +51,7 @@ describe("submitLead action", () => {
     const rawInput = `invalid submission probe ${Date.now()}`;
 
     const result = await submitLead(
-      { errors: {}, success: false },
+      { errors: {}, success: false, values: validFields },
       formDataFrom({ ...validFields, name: "", phone: "", email: "", rawInput })
     );
 
@@ -61,5 +61,16 @@ describe("submitLead action", () => {
 
     const lead = await prisma.lead.findFirst({ where: { rawInput } });
     expect(lead).toBeNull();
+  });
+
+  it("echoes back the submitted values on invalid input so the form isn't wiped", async () => {
+    const result = await submitLead(
+      { errors: {}, success: false, values: validFields },
+      formDataFrom({ ...validFields, name: "" })
+    );
+
+    expect(result.success).toBe(false);
+    expect(result.values.location).toBe(validFields.location);
+    expect(result.values.rawInput).toBe(validFields.rawInput);
   });
 });

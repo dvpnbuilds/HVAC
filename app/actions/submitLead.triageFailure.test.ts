@@ -37,7 +37,7 @@ describe("submitLead action — triage storage failure", () => {
     const uniqueName = `${validFields.name} ${Date.now()}`;
 
     const result = await submitLead(
-      { errors: {}, success: false },
+      { errors: {}, success: false, values: validFields },
       formDataFrom({ ...validFields, name: uniqueName })
     );
 

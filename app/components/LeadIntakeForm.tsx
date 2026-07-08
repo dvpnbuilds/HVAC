@@ -5,7 +5,20 @@ import { clientConfig } from "@/client.config";
 import { URGENCY_OPTIONS } from "@/lib/validation/leadForm";
 import { submitLead, type SubmitLeadState } from "@/app/actions/submitLead";
 
-const initialState: SubmitLeadState = { errors: {}, success: false };
+const initialState: SubmitLeadState = {
+  errors: {},
+  success: false,
+  values: {
+    name: "",
+    phone: "",
+    email: "",
+    location: "",
+    serviceType: "",
+    rawInput: "",
+    urgency: "",
+    preferredSchedule: "",
+  },
+};
 
 export function LeadIntakeForm() {
   const [state, formAction, pending] = useActionState(submitLead, initialState);
@@ -23,12 +36,21 @@ export function LeadIntakeForm() {
   }
 
   return (
-    <form action={formAction} className="w-full max-w-md space-y-4 text-left">
+    <form
+      key={JSON.stringify(state.values)}
+      action={formAction}
+      className="w-full max-w-md space-y-4 text-left"
+    >
       <div>
         <label htmlFor="name" className="block text-sm font-medium">
           Name
         </label>
-        <input id="name" name="name" className="mt-1 w-full rounded border px-3 py-2" />
+        <input
+          id="name"
+          name="name"
+          defaultValue={state.values.name}
+          className="mt-1 w-full rounded border px-3 py-2"
+        />
         {state.errors.name && <p className="mt-1 text-sm text-red-600">{state.errors.name}</p>}
       </div>
 
@@ -37,14 +59,24 @@ export function LeadIntakeForm() {
           <label htmlFor="phone" className="block text-sm font-medium">
             Phone
           </label>
-          <input id="phone" name="phone" className="mt-1 w-full rounded border px-3 py-2" />
+          <input
+            id="phone"
+            name="phone"
+            defaultValue={state.values.phone}
+            className="mt-1 w-full rounded border px-3 py-2"
+          />
           {state.errors.phone && <p className="mt-1 text-sm text-red-600">{state.errors.phone}</p>}
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
             Email
           </label>
-          <input id="email" name="email" className="mt-1 w-full rounded border px-3 py-2" />
+          <input
+            id="email"
+            name="email"
+            defaultValue={state.values.email}
+            className="mt-1 w-full rounded border px-3 py-2"
+          />
           {state.errors.email && <p className="mt-1 text-sm text-red-600">{state.errors.email}</p>}
         </div>
       </div>
@@ -53,7 +85,12 @@ export function LeadIntakeForm() {
         <label htmlFor="location" className="block text-sm font-medium">
           Location
         </label>
-        <input id="location" name="location" className="mt-1 w-full rounded border px-3 py-2" />
+        <input
+          id="location"
+          name="location"
+          defaultValue={state.values.location}
+          className="mt-1 w-full rounded border px-3 py-2"
+        />
         {state.errors.location && (
           <p className="mt-1 text-sm text-red-600">{state.errors.location}</p>
         )}
@@ -63,7 +100,12 @@ export function LeadIntakeForm() {
         <label htmlFor="serviceType" className="block text-sm font-medium">
           Service type
         </label>
-        <select id="serviceType" name="serviceType" className="mt-1 w-full rounded border px-3 py-2">
+        <select
+          id="serviceType"
+          name="serviceType"
+          defaultValue={state.values.serviceType}
+          className="mt-1 w-full rounded border px-3 py-2"
+        >
           <option value="">Select one</option>
           {clientConfig.serviceTypes.map((type) => (
             <option key={type} value={type}>
@@ -84,6 +126,7 @@ export function LeadIntakeForm() {
           id="rawInput"
           name="rawInput"
           rows={4}
+          defaultValue={state.values.rawInput}
           className="mt-1 w-full rounded border px-3 py-2"
         />
         {state.errors.rawInput && (
@@ -95,7 +138,12 @@ export function LeadIntakeForm() {
         <label htmlFor="urgency" className="block text-sm font-medium">
           Urgency
         </label>
-        <select id="urgency" name="urgency" className="mt-1 w-full rounded border px-3 py-2">
+        <select
+          id="urgency"
+          name="urgency"
+          defaultValue={state.values.urgency}
+          className="mt-1 w-full rounded border px-3 py-2"
+        >
           <option value="">Select one</option>
           {URGENCY_OPTIONS.map((option) => (
             <option key={option} value={option}>
@@ -115,6 +163,7 @@ export function LeadIntakeForm() {
         <input
           id="preferredSchedule"
           name="preferredSchedule"
+          defaultValue={state.values.preferredSchedule}
           className="mt-1 w-full rounded border px-3 py-2"
         />
       </div>

@@ -9,6 +9,7 @@ import { validateLeadForm, type LeadFormValues } from "@/lib/validation/leadForm
 export type SubmitLeadState = {
   errors: Partial<Record<keyof LeadFormValues, string>>;
   success: boolean;
+  values: LeadFormValues;
 };
 
 export async function submitLead(
@@ -28,7 +29,7 @@ export async function submitLead(
 
   const result = validateLeadForm(values);
   if (!result.valid) {
-    return { errors: result.errors, success: false };
+    return { errors: result.errors, success: false, values };
   }
 
   const lead = await createLead(result.data);
@@ -46,5 +47,5 @@ export async function submitLead(
     await logAction(lead.id, "triage_failed");
   }
 
-  return { errors: {}, success: true };
+  return { errors: {}, success: true, values };
 }
